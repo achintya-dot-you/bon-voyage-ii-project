@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Where To? </title>
+</head>
+<body>
+    <section class="header">
+        <div class="container">
+            <button type="button" class="login-btn">LOGIN</button>
+        </div>
+        <h1>WHERE TO?</h1>
+        <p>Helps you decide where to go!</p>
+        <div class="container">
+        <form action="/details" class="searchbar" method="POST">
+            
+            <input type="text" placeholder="Just type the name of your destination" name="place" id="place">
+            <button type="submit"><img src="/static/img/search.png" alt=""></button>
+        </form>
+            
+       </div>
+        
+
+    </section>
+
+    <script>
+        const findMyState = () => {
+
+            const success = (position) => {
+                console.log(position);
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                const geolocationAPI = `https://api.bigdatacloud.net/data/reverse-geo-code-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+
+                fetch(geolocationAPI)
+                .then(res => res.json())
+                .then(data=>{
+                    console.log(data)
+                })
+            }
+            const error = () => {
+                console.log("Didn't allow")
+            }
+            navigator.geolocation.getCurrentPosition(success, error);
+
+        }
+
+        document.querySelector('.btn').addEventListener('click', findMyState);
+    </script>
+</body>
+</html>
