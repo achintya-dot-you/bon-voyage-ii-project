@@ -2,7 +2,12 @@
     margin:0;
     padding:0;
 }
-
+body{
+    background-image: linear-gradient(to right top, #e7efff, #d5e1fe, #c6d2fc, #bac3fa, #b0b3f6);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+}
 .header{
     height: 100vh;
     width: 100%;

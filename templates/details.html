@@ -9,16 +9,69 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Where To? </title>
+    <style>
+        #cost:hover{
+            height:450px;
+            width:225px;
+            transition: 2s;
+        }
+    </style>
 </head>
 
 <body>
+    <h1 align="center" style="font-weight: bold; font-size:3.5rem; color: rgb(238, 220, 220)">{{data.location}}</h1>
     <section class="header">
-        <div class="container">
-            <button type="button" class="login-btn">LOGIN</button>
-        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 mt-3">
+                    <div class="card" style="border-radius:15px;" >
+                        <h3 class="text-center" style="color:beige; font-size:4.5rem; background-color:rgb(100, 174, 177) ;"><span style="font-size: 2rem !important; padding: 0; margin:0;" id="cost">Estimated daily cost:<br></span>${{data.totalExpenditure}}</h3>
+                        <div class="card-body text-light" style="background-color: rgb(100, 174, 177);">
+                            <p class="card-text-justify" style="font-size:2.5rem;">
+                                ACCOMODATION : <span style="color:rgb(233, 225, 222); font-weight:bold;">${{data.accomodationInUSD}}</span><br>COST: <span style="color:rgb(233, 225, 222); font-weight:bold;">${{data.priceInUSD}} </span>
+                                
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="row">
+        
+                        <div class="col-md-12 mt-3">
+                            <div class="card" style="border-radius:15px; height:300px; " id="kayak" >
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3 mb-3">
+                            <div class="card" style="border-radius:15px" ;>
+                                <h3 class="text-center" style="color:beige; font-size:4.5rem; background-color:rgb(100, 174, 177) ;"><img width=25% height=25% src="{{data.condition_url}}" alt="">{{data.condition}}</h3> 
+                                <div class="card-body text-light" style="background-color: rgb(100, 174, 177) ;">
+                                    <p class="card-text">Weather: <span style="font-size:3.5rem; font-weight: bold;">{{data.temperature}}&#176;C</span><br>Humidity: <span style="font-size:3.5rem; font-weight: bold;">{{data.humidity}}%</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+        
+                        <div class="col-md-12 mt-3">
+                            <div class="card" style="border-radius:15px" ;>
+                                <h3 class="text-center" style="color:beige; font-size:4.5rem; background-color:rgb(100, 174, 177);">$1={{data.exchangeRate}} {{data.currency}}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <div class="card" style="border-radius:15px" ;>
+                                <h3 class="text-center" style="color:beige; font-size:4.5rem; background-color:rgb(100, 174, 177);"><span style="font-size: 2rem !important; padding: 0; margin:0;">Current time:</span><br> {{data.localtime}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div></div>
+        
     </section>
 
-    <h3></h3>
+    
 
     <script>
         const findMyState = () => {
@@ -42,8 +95,41 @@
             navigator.geolocation.getCurrentPosition(success, error);
 
         }
+        function currentTime() {
+                let date = new Date();
+                let hh = date.getHours();
+                let mm = date.getMinutes();
+                let ss = date.getSeconds();
+                let session = "AM";
+
+                if (hh == 0) {
+                    hh = 12;
+                }
+                if (hh > 12) {
+                    hh = hh - 12;
+                    session = "PM";
+                }
+
+                hh = (hh < 10) ? "0" + hh : hh;
+                mm = (mm < 10) ? "0" + mm : mm;
+                ss = (ss < 10) ? "0" + ss : ss;
+
+                let time = hh + ":" + mm + ":" + ss + " " + session;
+
+                document.getElementById("clock").innerText = time;
+                let t = setTimeout(function () { currentTime() }, 1000);
+            }
+            currentTime();
 
         document.querySelector('.btn').addEventListener('click', findMyState);
+    </script>
+    <script type="text/javaScript" src="https://www.kayak.com/affiliate/widget-v2.js"></script>
+    <script type="text/JavaScript">
+        const element = document.getElementById("kayak");
+        KAYAK.embed({
+container: element, 
+destination: "{{data}}" /* more options */
+})
     </script>
 </body>
 
