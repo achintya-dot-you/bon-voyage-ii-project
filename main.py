@@ -1,3 +1,4 @@
+from itertools import count
 import requests
 from flask import Flask, render_template, request, redirect
 from bs4 import BeautifulSoup
@@ -18,12 +19,31 @@ def details():
         location = request.form["place"]
         response = requests.get(
            f"https://api.weatherapi.com/v1/current.json?key=c06274bfc57f4655906104744220406&q={location.capitalize()}&aqi=no").json()
-        print(response)
+        #print(response)
         temperature = response["current"]["temp_c"]
         localtime = response["location"]["localtime"]
         humidity = response["current"]["humidity"]
         condition = response["current"]["condition"]["text"]
         condition_url = response["current"]["condition"]["icon"]
+        country = response["location"]["country"]
+        country = country.replace(" ", "-").lower()
+
+
+        cost = requests.get(
+            f"https://www.budgetyourtrip.com/{country}").text
+        soup = BeautifulSoup(cost, "lxml")
+        price = soup.find("span", class_="curvalue")
+        accomodation = soup.find(
+            "li", class_="cost-tile cost-tile-category cost-tile-category-accommodation cost-tile-category-1").text
+        newList = accomodation.split("Hotel or hostel for one person")
+        accomodation = newList[-1]
+        accomodation = accomodation.replace("\t","")
+        accomodation = accomodation.replace("\n","")
+        accomodation = accomodation.replace(" ","")
+        print(accomodation)
+        
+
+
 
         return render_template("details.html", inputUser=request.form)
     else:
